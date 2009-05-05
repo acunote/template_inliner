@@ -1,0 +1,23 @@
+Template inliner avoids the problem when to render a large list of objects,
+Rails creates a large number of View instances, requiring additional CPU and memory
+for each of them.
+
+Example situation:
+    <% for object in objects %>   #1000 times
+        <%= render :partial => 'object', :locals => { :object => object } %>
+    <% end %>
+
+
+Template inliner will include the source of the partial into the
+template where it's rendered from before Rails starts processing the template.
+
+To use, just add :inline => true to the 'render' call.
+Note, the entire call to render inlined partial must be on the one line for
+template inliner to work.
+
+Example:
+    <% for object in objects %>   #1000 times
+        <%= render :partial => 'object', :locals => { :object => object }, :inline => true %>
+    <% end %>
+
+Copyright (c) 2008-2009 Pluron, Inc. Released under the MIT license.
